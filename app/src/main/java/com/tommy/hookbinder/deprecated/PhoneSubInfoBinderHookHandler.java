@@ -1,0 +1,42 @@
+package com.symantec.startmobile.hookbinder.deprecated;
+
+import android.os.IBinder;
+import android.util.Log;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+/**
+ * Created by TommyD on 2018/5/4.
+ */
+
+public class PhoneSubInfoBinderHookHandler implements InvocationHandler {
+    private static final String TAG = "TOMMY";
+
+    // 原始的Service对象 (IInterface)
+    Object base;
+
+    public PhoneSubInfoBinderHookHandler(IBinder base, Class<?> stubClass) {
+        try {
+            Method asInterfaceMethod = stubClass.getDeclaredMethod("asInterface", IBinder.class);
+            // IPhoneSubInfo.Stub.asInterface(base);
+            this.base = asInterfaceMethod.invoke(null, base);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if ("getDeviceId".equals(method.getName())) {
+            Log.d(TAG, "hook getDeviceId");
+            return "do not joke me";
+        }
+        return method.invoke(base, args);
+    }
+}
