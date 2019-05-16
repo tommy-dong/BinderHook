@@ -1,2 +1,2 @@
 # BinderHook
-This is a demo app to show how to hook binder object by dynamic proxy & static proxy in test branch.
+This is a demo app to show how to hook binder object by dynamic proxy & static proxy in test1 branch.
